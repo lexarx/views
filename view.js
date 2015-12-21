@@ -4,7 +4,7 @@ define('views/view', [
 	/**
 	 * @class View
 	 * @extends Views.Element
-	 * @implements {Views.View}
+	 * @implements {Views.ViewInterface}
 	 * @namespace Views
 	 */
 	var View = Element.extend({
