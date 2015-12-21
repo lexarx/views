@@ -12,7 +12,15 @@ define('views/list', [
 		 * @override
 		 */
 		render: function() {
-			this.container = this.element;
+			this.container = this.createContainer();
+		},
+
+		/**
+		 * @protected
+		 * @returns {Node}
+		 */
+		createContainer: function() {
+			return this.element;
 		},
 		
 		/**
