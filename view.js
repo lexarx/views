@@ -300,13 +300,13 @@ define('views/view', [
 
 		/**
 		 * @implements {Views.ViewInterface}
-		 * @param {Object} target
-		 * @param {String} property
-		 * @param {String} path
-		 * @param {Binding.Converter|Function} converter
+		 * @param {Object} [target]
+		 * @param {String} [property]
+		 * @param {String} [path]
+		 * @param {Binding.Converter|Function} [converter]
 		 * @returns {Binding.Binding}
 		 */
-		addBinding: function(target, property, path, converter) {
+		bind: function(target, property, path, converter) {
 			var binding = new Binding(this.data, path, target, property, converter);
 			if (this.bindings === null) {
 				this.bindings = [];
@@ -319,7 +319,7 @@ define('views/view', [
 		 * @implements {Views.ViewInterface}
 		 * @param {Binding.Binding} binding
 		 */
-		removeBinding: function(binding) {
+		unbind: function(binding) {
 			if (this.bindings === null) {
 				return;
 			}

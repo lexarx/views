@@ -17,8 +17,8 @@ define('views/view-interface', [
 	 * @method hide
 	 * @method setData
 	 * @method getData
-	 * @method addBinding
-	 * @method removeBinding
+	 * @method bind
+	 * @method unbind
 	 */
 	return new Interface([
 		Node
