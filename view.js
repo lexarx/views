@@ -282,10 +282,12 @@ define('views/view', [
 		 * @param {*} data
 		 */
 		setData: function(data) {
-			this.data = data;
-			if (this.bindings !== null) {
-				for (var i = 0; i < this.bindings.length; i++) {
-					this.bindings[i].setSource(this.data);
+			if (this.data !== data) {
+				this.data = data;
+				if (this.bindings !== null) {
+					for (var i = 0; i < this.bindings.length; i++) {
+						this.bindings[i].setSource(this.data);
+					}
 				}
 			}
 		},
