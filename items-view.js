@@ -202,7 +202,7 @@ define('views/items-view', [
 		 * @param {Collections.CollectionChange} change
 		 */
 		onItemsChanged: function(collection, change) {
-			if (this.canCreateViews()) {
+			if (!this.canCreateViews()) {
 				return;
 			}
 			if (change.oldItems.length > 0) {
