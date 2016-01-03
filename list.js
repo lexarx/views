@@ -55,7 +55,7 @@ define('views/list', [
 				var fragment = this.createViewsDocumentFragment(args.newItems);
 				var index = args.index + args.newItems.length;
 				var element;
-				if (index < this.children.count) {
+				if (index < this.children.count()) {
 					var view = this.children.get(index);
 					element = this.getViewNode(view);
 				} else {

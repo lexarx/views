@@ -55,7 +55,7 @@ define('views/stack-panel', [
 				var fragment = this.createViewsDocumentFragment(change.newItems);
 				var index = change.index + change.newItems.length;
 				var element;
-				if (index < this.children.count) {
+				if (index < this.children.count()) {
 					var view = this.children.get(index);
 					element = this.getViewNode(view);
 				} else {
