@@ -15,14 +15,28 @@ define('views/items-view', [
 		 */
 		constructor: function(parameters) {
 			this.super(parameters);
+			// Collect predefined values and reset properties.
+			var items = this.items;
+			this.items = null;
+			var view = this.view;
+			this.view = null;
+			var viewsPool = this.viewsPool;
+			this.viewsPool = null;
+			// Set values from parameters or the predefined values.
 			if (parameters !== undefined && parameters.items !== undefined) {
 				this.setItems(parameters.items);
+			} else if (items !== undefined) {
+				this.setItems(items);
 			}
 			if (parameters !== undefined && parameters.view !== undefined) {
 				this.setView(parameters.view);
+			} else if (view !== undefined) {
+				this.setView(view);
 			}
 			if (parameters !== undefined && parameters.viewsPool !== undefined) {
 				this.setViewsPool(parameters.viewsPool);
+			} else if (viewsPool !== undefined) {
+				this.setViewsPool(viewsPool);
 			}
 		},
 
