@@ -16,11 +16,10 @@ define('views/element', [
 		 * @param {Views.Element.Parameters} [parameters]
 		 */
 		constructor: function(parameters) {
-			var tag = this.tag;
 			if (parameters !== undefined && parameters.tag !== undefined) {
-				tag = parameters.tag;
+				this.tag = parameters.tag;
 			}
-			this.element = document.createElement(tag);
+			this.element = this.createElement();
 			if (parameters !== undefined && parameters.id !== undefined) {
 				this.setId(parameters.id);
 			} else if (this.id !== undefined) {
@@ -36,6 +35,14 @@ define('views/element', [
 			} else if (this.attributes !== undefined) {
 				this.setAttributes(this.attributes);
 			}
+		},
+
+		/**
+		 * @protected
+		 * @returns {Element}
+		 */
+		createElement: function() {
+			return document.createElement(this.tag);
 		},
 
 		/**
