@@ -47,13 +47,13 @@ define('views/list', [
 		 * @protected
 		 * @override
 		 * @param {Collections.ObservableCollection<Views.Node|Node>} collection
-		 * @param {Collections.CollectionChange<Views.Node|Node>} args
+		 * @param {Collections.CollectionChange<Views.Node|Node>} change
 		 */
-		onChildrenChanged: function(collection, args) {
+		onChildrenChanged: function(collection, change) {
 			// Old views are already detached during destruction.
-			if (args.newItems.length > 0) {
-				var fragment = this.createViewsDocumentFragment(args.newItems);
-				var index = args.index + args.newItems.length;
+			if (change.newItems.length > 0) {
+				var fragment = this.createViewsDocumentFragment(change.newItems);
+				var index = change.index + change.newItems.length;
 				var element;
 				if (index < this.children.count()) {
 					var view = this.children.get(index);
@@ -63,7 +63,7 @@ define('views/list', [
 				}
 				this.container.insertBefore(fragment, element);
 			}
-			this.super(collection, args);
+			this.super(collection, change);
 		}
 	});
 });
