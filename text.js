@@ -1,12 +1,14 @@
 define('views/text', [
 	'views/view'
 ], function(View) {
+	var textContentSupported = 'textContent' in document.documentElement;
+	
 	/**
 	 * @class Text
 	 * @extends Views.View
 	 * @namespace Views
 	 */
-	return View.extend({
+	var Text = View.extend({
 		/**
 		 * @constructor
 		 * @override
@@ -23,24 +25,49 @@ define('views/text', [
 		 * @param {String} text
 		 */
 		setText: function(text) {
-			if (text === undefined || text === null) {
-				text = '';
-			}
-			if (this.element.textContent !== undefined) {
-				this.element.textContent = text;
-			} else {
-				this.element.innerText = text;
-			}
+			Text.setText(this.element, text);
 		},
 
 		/**
 		 * @returns {String}
 		 */
 		getText: function() {
-			return this.element.textContent !== undefined ? this.element.textContent :
-				this.element.innerText;
+			return Text.getText(this.element);
+		}
+	}, {
+		/**
+		 * @param {Element} element
+		 * @returns {String}
+		 */
+		getText: textContentSupported ? function(element) {
+			return element.textContent;
+		} : function(element) {
+			return element.innerText;
+		},
+
+		/**
+		 * @param {Element} element
+		 * @param {String} text
+		 */
+		setText: function(element, text) {
+			if (text === undefined || text === null) {
+				text = '';
+			}
+			Text.setTextContent(element, text);
+		},
+
+		/**
+		 * @param {Element} element
+		 * @param {String} text
+		 */
+		setTextContent: textContentSupported ? function(element, text) {
+			element.textContent = text;
+		} : function(element, text) {
+			element.innerText = text;
 		}
 	});
+	
+	module.exports = Text;
 	
 	/**
 	 * @typedef Parameters
