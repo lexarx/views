@@ -2,6 +2,7 @@ define('views/element', [
 	'class', 'views/node'
 ], function(Class, Node) {
 	var classSeparatorRegExp = / +/;
+	var classListSupported = 'classList' in document.documentElement;
 
 	/**
 	 * @class Element
@@ -84,35 +85,14 @@ define('views/element', [
 		 * @param {String} className
 		 */
 		addClass: function(className) {
-			if (this.element.classList !== undefined) {
-				this.element.classList.add(className);
-			} else {
-				var newClassName = this.element.className;
-				var length = newClassName.length;
-				if (length > 0 && newClassName.charAt(length - 1) !== ' ') {
-					newClassName += ' ';
-				}
-				newClassName += className;
-				this.element.className = ' ' + newClassName;
-			}
+			Element.addClass(this.element, className);
 		},
 
 		/**
 		 * @param {String} className
 		 */
 		removeClass: function(className) {
-			if (this.element.classList !== undefined) {
-				this.element.classList.remove(className);
-			} else {
-				var classes = this.element.className.split(classSeparatorRegExp);
-				for (var i = classes.length - 1; i >= 0; i--) {
-					var part = classes[i];
-					if (part === className || part === '') {
-						classes.splice(i, 1);
-					}
-				}
-				this.element.className = classes.join(' ');
-			}
+			Element.removeClass(this.element, className);
 		},
 
 		/**
@@ -145,6 +125,39 @@ define('views/element', [
 		 */
 		getNode: function() {
 			return this.element;
+		}
+	}, {
+		/**
+		 * @param {Element} element
+		 * @param {String} className
+		 */
+		addClass: classListSupported ? function(element, className) {
+			element.classList.add(className);
+		} : function(element, className) {
+			var newClassName = element.className;
+			var length = newClassName.length;
+			if (length > 0 && newClassName.charAt(length - 1) !== ' ') {
+				newClassName += ' ';
+			}
+			newClassName += className;
+			element.className = ' ' + newClassName;
+		},
+
+		/**
+		 * @param {Element} element
+		 * @param {String} className
+		 */
+		removeClass: classListSupported ? function(element, className) {
+			element.classList.remove(className);
+		} : function(element, className) {
+			var classes = element.className.split(classSeparatorRegExp);
+			for (var i = classes.length - 1; i >= 0; i--) {
+				var part = classes[i];
+				if (part === className || part === '') {
+					classes.splice(i, 1);
+				}
+			}
+			element.className = classes.join(' ');
 		}
 	});
 	
