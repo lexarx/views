@@ -110,7 +110,7 @@ define('views/view', [
 			if (!this.elementAttached) {
 				this.elementAttached = true;
 				this.attached.trigger(this);
-				if (this.visible && this.isParentShown() && !this.elementShown) {
+				if (!this.elementShown && this.visible && this.isParentShown()) {
 					this.elementShown = true;
 					this.onShown();
 				}
@@ -168,7 +168,7 @@ define('views/view', [
 			if (!this.visible) {
 				this.visible = true;
 				this.showElement();
-				if (this.isParentShown() && !this.elementShown) {
+				if (!this.elementShown && this.isParentShown()) {
 					this.elementShown = true;
 					this.onShown();
 				}
@@ -236,7 +236,7 @@ define('views/view', [
 			if (!this.elementAttached) {
 				this.onAttached();
 			}
-			if (this.visible && this.isParentShown() && !this.elementShown) {
+			if (!this.elementShown && this.visible && this.isParentShown()) {
 				this.elementShown = true;
 				this.onShown();
 			}
@@ -260,7 +260,7 @@ define('views/view', [
 		 * @protected
 		 */
 		onParentShown: function() {
-			if (this.visible && !this.elementShown) {
+			if (!this.elementShown && this.visible) {
 				this.elementShown = true;
 				this.onShown();
 			}
