@@ -4,7 +4,7 @@
   "dependencies": {
     "binding": "github:lexarx/binding",
     "class": "github:lexarx/class",
-	"collections": "github:lexarx/collections",
+    "collections": "github:lexarx/collections",
     "event": "github:lexarx/event",
     "interface": "github:lexarx/interface"
   }
