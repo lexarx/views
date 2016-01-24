@@ -2,12 +2,16 @@ define('views/items-view', [
 	'views/container', 'views/view-interface', 'collections/collection-interface',
 	'collections/observable-collection-interface'
 ], function(Container, ViewInterface, CollectionInterface, ObservableCollectionInterface) {
+	var emptyArray = [];
+	
 	/**
 	 * @class ItemsView
 	 * @extends Views.Container
 	 * @namespace Views
 	 */
 	return Container.extend({
+		optimizedUpdate: true,
+
 		/**
 		 * @constructor
 		 * @override
@@ -41,11 +45,16 @@ define('views/items-view', [
 		},
 
 		/**
-		 * @param {Array|CollectionInterface} items
+		 * @param {Array|Collections.CollectionInterface} items
 		 */
 		setItems: function(items) {
 			if (this.items !== items) {
-				this.destroyViews(this.children);
+				var oldItems;
+				if (this.optimizedUpdate) {
+					oldItems = this.items;
+				} else {
+					this.destroyViews();
+				}
 				if (ObservableCollectionInterface.isImplementedBy(this.items)) {
 					this.items.changed.remove(this.onItemsChanged, this);
 				}
@@ -53,12 +62,16 @@ define('views/items-view', [
 				if (ObservableCollectionInterface.isImplementedBy(this.items)) {
 					this.items.changed.add(this.onItemsChanged, this);
 				}
-				this.updateViews();
+				if (this.optimizedUpdate) {
+					this.updateViewsOptimized(0, oldItems, this.items);
+				} else {
+					this.updateViews();
+				}
 			}
 		},
 
 		/**
-		 * @returns {Array|CollectionInterface}
+		 * @returns {Array|Collections.CollectionInterface}
 		 */
 		getItems: function() {
 			return this.items;
@@ -72,7 +85,7 @@ define('views/items-view', [
 				throw new Error('Only one of view or viewsPool must be set.');
 			}
 			if (this.view !== view) {
-				this.destroyViews(this.children);
+				this.destroyViews();
 				this.view = view;
 				this.updateViews();
 			}
@@ -93,7 +106,7 @@ define('views/items-view', [
 				throw new Error('Only one of view or viewsPool must be set.');
 			}
 			if (this.viewsPool !== viewsPool) {
-				this.destroyViews(this.children);
+				this.destroyViews();
 				this.viewsPool = viewsPool;
 				this.updateViews();
 			}
@@ -117,7 +130,7 @@ define('views/items-view', [
 				(this.viewsPool !== undefined && this.viewsPool !== null)
 			);
 		},
-		
+
 		/**
 		 * @protected
 		 */
@@ -128,6 +141,44 @@ define('views/items-view', [
 			} else {
 				this.children.clear();
 			}
+		},
+
+		/**
+		 * @protected
+		 * @param {Number} index
+		 * @param {Array|Collections.CollectionInterface} oldItems
+		 * @param {Array|Collections.CollectionInterface} newItems
+		 */
+		updateViewsOptimized: function(index, oldItems, newItems) {
+			if (!this.canCreateViews()) {
+				return;
+			}
+			if (oldItems === undefined || oldItems === null) {
+				oldItems = emptyArray;
+			}
+			if (newItems === undefined || newItems === null) {
+				newItems = emptyArray;
+			}
+			var oldItemsCollection = CollectionInterface.isImplementedBy(oldItems);
+			var newItemsCollection = CollectionInterface.isImplementedBy(newItems);
+			var oldItemsCount = oldItemsCollection ? oldItems.count() : oldItems.length;
+			var newItemsCount = newItemsCollection ? newItems.count() : newItems.length;
+			var inPlaceViewsCount = Math.min(oldItemsCount, newItemsCount);
+			for (var i = 0; i < inPlaceViewsCount; i++) {
+				var view = this.children.get(index + i);
+				if (ViewInterface.isImplementedBy(view)) {
+					var data = newItemsCollection ? newItems.get(i) : newItems[i];
+					view.setData(data);
+				}
+			}
+			var newIndex = index + inPlaceViewsCount;
+			var oldViewsCount = oldItemsCount - inPlaceViewsCount;
+			if (oldViewsCount > 0) {
+				this.destroyViews(newIndex, oldViewsCount);
+			}
+			var newViewsCount = newItemsCount - inPlaceViewsCount;
+			var newViews = this.createViews(newItems, inPlaceViewsCount, newViewsCount);
+			this.children.replaceRange(newIndex, oldViewsCount, newViews);
 		},
 
 		/**
@@ -168,19 +219,28 @@ define('views/items-view', [
 
 		/**
 		 * @private
-		 * @param {Array|CollectionInterface} items
+		 * @param {Array|Collections.CollectionInterface} items
+		 * @param {Number} [index]
+		 * @param {Number} [count]
 		 */
-		createViews: function(items) {
-			if (CollectionInterface.isImplementedBy(items)) {
-				return items.map(this.createView, this);
-			} else {
-				var views = [];
-				for (var i = 0; i < items.length; i++) {
-					var view = this.createView(items[i]);
-					views.push(view);
-				}
-				return views;
+		createViews: function(items, index, count) {
+			if (index === undefined) {
+				index = 0;
 			}
+			if (items === undefined || items === null) {
+				items = emptyArray;
+			}
+			var collection = CollectionInterface.isImplementedBy(items);
+			if (count === undefined) {
+				count = collection ? items.count() : items.length;
+			}
+			var views = [];
+			for (var i = index; i < index + count; i++) {
+				var item = collection ? items.get(i) : items[i];
+				var view = this.createView(item);
+				views.push(view);
+			}
+			return views;
 		},
 
 		/**
@@ -198,15 +258,19 @@ define('views/items-view', [
 
 		/**
 		 * @private
-		 * @param {Array<Views.Node|Node>|CollectionInterface<Views.Node|Node>} views
+		 * @param {Number} [index]
+		 * @param {Number} [count]
 		 */
-		destroyViews: function(views) {
-			if (CollectionInterface.isImplementedBy(views)) {
-				return views.map(this.destroyView, this);
-			} else if (views !== undefined && views !== null) {
-				for (var i = 0; i < views.length; i++) {
-					this.destroyView(views[i]);
-				}
+		destroyViews: function(index, count) {
+			if (index === undefined) {
+				index = 0;
+			}
+			if (count === undefined) {
+				count = this.children.count();
+			}
+			for (var i = index; i < index + count; i++) {
+				var view = this.children.get(i);
+				this.destroyView(view);
 			}
 		},
 
@@ -216,15 +280,7 @@ define('views/items-view', [
 		 * @param {Collections.CollectionChange} change
 		 */
 		onItemsChanged: function(collection, change) {
-			if (!this.canCreateViews()) {
-				return;
-			}
-			if (change.oldItems.length > 0) {
-				var oldViews = this.children.getRange(change.index, change.oldItems.length);
-				this.destroyViews(oldViews);
-			}
-			var newViews = this.createViews(change.newItems);
-			this.children.replaceRange(change.index, change.oldItems.length, newViews);
+			this.updateViewsOptimized(change.index, change.oldItems, change.newItems);
 		}
 	});
 	
