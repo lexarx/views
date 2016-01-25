@@ -29,7 +29,9 @@ define('views/list', [
 		 */
 		detachView: function(view) {
 			var node = this.getViewNode(view);
-			this.container.removeChild(node);
+			if (node.parentNode === this.container) {
+				this.container.removeChild(node);
+			}
 		},
 
 		/**
@@ -54,14 +56,14 @@ define('views/list', [
 			if (change.newItems.length > 0) {
 				var fragment = this.createViewsDocumentFragment(change.newItems);
 				var index = change.index + change.newItems.length;
-				var element;
+				var node;
 				if (index < this.children.count()) {
 					var view = this.children.get(index);
-					element = this.getViewNode(view);
+					node = this.getViewNode(view);
 				} else {
-					element = null;
+					node = null;
 				}
-				this.container.insertBefore(fragment, element);
+				this.container.insertBefore(fragment, node);
 			}
 			this.super(collection, change);
 		}
