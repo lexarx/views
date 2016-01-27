@@ -1,6 +1,6 @@
 define('views/list', [
-	'views/items-view'
-], function(ItemsView) {
+	'views/items-view', 'views/views'
+], function(ItemsView, Views) {
 	/**
 	 * @class List
 	 * @extends Views.ItemsView
@@ -28,7 +28,7 @@ define('views/list', [
 		 * @param {Views.Node|Node} view
 		 */
 		detachView: function(view) {
-			var node = this.getViewNode(view);
+			var node = Views.getNode(view);
 			if (node.parentNode === this.container) {
 				this.container.removeChild(node);
 			}
@@ -54,12 +54,12 @@ define('views/list', [
 		onChildrenChanged: function(collection, change) {
 			// Old views are already detached during destruction.
 			if (change.newItems.length > 0) {
-				var fragment = this.createViewsDocumentFragment(change.newItems);
+				var fragment = Views.createDocumentFragment(change.newItems);
 				var index = change.index + change.newItems.length;
 				var node;
 				if (index < this.children.count()) {
 					var view = this.children.get(index);
-					node = this.getViewNode(view);
+					node = Views.getNode(view);
 				} else {
 					node = null;
 				}

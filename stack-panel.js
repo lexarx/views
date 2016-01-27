@@ -1,6 +1,6 @@
 define('views/stack-panel', [
-	'views/container'
-], function(Container) {
+	'views/container', 'views/views'
+], function(Container, Views) {
 	/**
 	 * @class StackPanel
 	 * @extends Views.Container
@@ -28,7 +28,7 @@ define('views/stack-panel', [
 		 * @param {Views.Node|Node} view
 		 */
 		detachView: function(view) {
-			var node = this.getViewNode(view);
+			var node = Views.getNode(view);
 			if (node.parentNode === this.container) {
 				this.container.removeChild(node);
 			}
@@ -54,12 +54,12 @@ define('views/stack-panel', [
 				this.detachViews(change.oldItems);
 			}
 			if (change.newItems.length > 0) {
-				var fragment = this.createViewsDocumentFragment(change.newItems);
+				var fragment = Views.createDocumentFragment(change.newItems);
 				var index = change.index + change.newItems.length;
 				var node;
 				if (index < this.children.count()) {
 					var view = this.children.get(index);
-					node = this.getViewNode(view);
+					node = Views.getNode(view);
 				} else {
 					node = null;
 				}

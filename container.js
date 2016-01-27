@@ -1,6 +1,6 @@
 define('views/container', [
-	'views/view', 'collections/observable-collection', 'views/view-interface', 'views/node'
-], function(View, ObservableCollection, ViewInterface, Node) {
+	'views/view', 'collections/observable-collection', 'views/view-interface'
+], function(View, ObservableCollection, ViewInterface) {
 	/**
 	 * Base class for all container views. Takes care about lifecycle events of child views.
 	 * Child views must be attached to parent element in derived class before calling onChildrenChanged().
@@ -28,32 +28,6 @@ define('views/container', [
 		 */
 		setChildren: function(children) {
 			this.children.setItems(children);
-		},
-
-		/**
-		 * @protected
-		 * @param {Views.Node|Node} view
-		 */
-		getViewNode: function(view) {
-			if (Node.isImplementedBy(view)) {
-				return view.getNode();
-			} else {
-				return view;
-			}
-		},
-
-		/**
-		 * @protected
-		 * @param {Array<Views.Node|Node>} views
-		 * @returns {DocumentFragment}
-		 */
-		createViewsDocumentFragment: function(views) {
-			var fragment = document.createDocumentFragment();
-			for (var i = 0; i < views.length; i++) {
-				var node = this.getViewNode(views[i]);
-				fragment.appendChild(node);
-			}
-			return fragment;
 		},
 
 		/**
