@@ -22,17 +22,6 @@ define('views/list', [
 		createContainer: function() {
 			return this.element;
 		},
-		
-		/**
-		 * @protected
-		 * @param {Views.Node|Node} view
-		 */
-		detachView: function(view) {
-			var node = Views.getNode(view);
-			if (node.parentNode === this.container) {
-				this.container.removeChild(node);
-			}
-		},
 
 		/**
 		 * @protected
@@ -41,7 +30,7 @@ define('views/list', [
 		 */
 		destroyView: function(view) {
 			// Detach view before destruction to avoid reflow.
-			this.detachView(view);
+			Views.detachView(view, this.container);
 			this.super(view);
 		},
 

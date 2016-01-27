@@ -24,6 +24,30 @@ define('views/views', [
 				fragment.appendChild(node);
 			}
 			return fragment;
+		},
+
+		/**
+		 * Detaches the view from it's parent node.
+		 * If parentNode is provided then the view is detached only if it's a child of this node.
+		 * @param {Views.Node|Node} view
+		 * @param {Node} [parentNode]
+		 */
+		detachView: function(view, parentNode) {
+			var node = this.getNode(view);
+			if (node.parentNode !== null &&
+					(parentNode === undefined || node.parentNode === parentNode)) {
+				node.parentNode.removeChild(node);
+			}
+		},
+
+		/**
+		 * @param {Array<Views.Node|Node>} views
+		 * @param {Node} [parentNode]
+		 */
+		detachViews: function(views, parentNode) {
+			for (var i = 0; i < views.length; i++) {
+				this.detachView(views[i], parentNode);
+			}
 		}
 	};
 });

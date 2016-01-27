@@ -24,34 +24,13 @@ define('views/stack-panel', [
 		},
 
 		/**
-		 * @protected
-		 * @param {Views.Node|Node} view
-		 */
-		detachView: function(view) {
-			var node = Views.getNode(view);
-			if (node.parentNode === this.container) {
-				this.container.removeChild(node);
-			}
-		},
-
-		/**
-		 * @protected
-		 * @param {Array<Views.Node|Node>} views
-		 */
-		detachViews: function(views) {
-			for (var i = 0; i < views.length; i++) {
-				this.detachView(views[i]);
-			}
-		},
-
-		/**
 		 * @override
 		 * @param {Collections.ObservableCollection<Views.Node|Node>} collection
 		 * @param {Collections.CollectionChange<Views.Node|Node>} change
 		 */
 		onChildrenChanged: function(collection, change) {
 			if (change.oldItems.length > 0) {
-				this.detachViews(change.oldItems);
+				Views.detachViews(change.oldItems, this.container);
 			}
 			if (change.newItems.length > 0) {
 				var fragment = Views.createDocumentFragment(change.newItems);
