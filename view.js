@@ -1,6 +1,6 @@
 define('views/view', [
-	'views/element', 'event', 'binding/binding', 'views/view-interface'
-], function(Element, Event, Binding, ViewInterface) {
+	'views/element', 'event', 'binding/binding', 'views/parent-interface', 'views/view-interface', 'views/data-interface'
+], function(Element, Event, Binding, ParentInterface, ViewInterface, DataInterface) {
 	/**
 	 * @class View
 	 * @extends Views.Element
@@ -58,8 +58,8 @@ define('views/view', [
 		render: function() {},
 
 		/**
-		 * @implements {Views.ViewInterface}
-		 * @param {Views.Node|Node} parent
+		 * @implements {Views.ParentInterface}
+		 * @param {Views.NodeInterface|Node} parent
 		 */
 		setParent: function(parent) {
 			if (this.parent !== parent) {
@@ -86,6 +86,14 @@ define('views/view', [
 					this.onDetached();
 				}
 			}
+		},
+
+		/**
+		 * @implements {Views.ParentInterface}
+		 * @returns {Views.NodeInterface|Node}
+		 */
+		getParent: function() {
+			return this.parent;
 		},
 
 		/**
@@ -278,7 +286,7 @@ define('views/view', [
 		},
 
 		/**
-		 * @implements {Views.ViewInterface}
+		 * @implements {Views.DataInterface}
 		 * @param {*} data
 		 */
 		setData: function(data) {
@@ -293,7 +301,7 @@ define('views/view', [
 		},
 
 		/**
-		 * @implements {Views.ViewInterface}
+		 * @implements {Views.DataInterface}
 		 * @returns {*}
 		 */
 		getData: function() {
@@ -301,7 +309,6 @@ define('views/view', [
 		},
 
 		/**
-		 * @implements {Views.ViewInterface}
 		 * @param {Object} [target]
 		 * @param {String} [property]
 		 * @param {String} [path]
@@ -318,7 +325,6 @@ define('views/view', [
 		},
 
 		/**
-		 * @implements {Views.ViewInterface}
 		 * @param {Binding.Binding} binding
 		 */
 		unbind: function(binding) {
@@ -332,8 +338,10 @@ define('views/view', [
 			}
 		}
 	});
-	
+
+	ParentInterface.addTo(View);
 	ViewInterface.addTo(View);
+	DataInterface.addTo(View);
 	
 	return View;
 	

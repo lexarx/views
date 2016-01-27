@@ -1,6 +1,6 @@
 define('views/container', [
-	'views/view', 'collections/observable-collection', 'views/view-interface'
-], function(View, ObservableCollection, ViewInterface) {
+	'views/view', 'collections/observable-collection', 'views/parent-interface'
+], function(View, ObservableCollection, ParentInterface) {
 	/**
 	 * Base class for all container views. Takes care about lifecycle events of child views.
 	 * Child views must be attached to parent element in derived class before calling onChildrenChanged().
@@ -24,7 +24,7 @@ define('views/container', [
 		},
 
 		/**
-		 * @param {Array<Views.Node|Node>} children
+		 * @param {Array<Views.NodeInterface|Node>} children
 		 */
 		setChildren: function(children) {
 			this.children.setItems(children);
@@ -32,19 +32,19 @@ define('views/container', [
 
 		/**
 		 * @protected
-		 * @param {Collections.ObservableCollection<Views.Node|Node>} collection
-		 * @param {Collections.CollectionChange<Views.Node|Node>} change
+		 * @param {Collections.ObservableCollection<Views.NodeInterface|Node>} collection
+		 * @param {Collections.CollectionChange<Views.NodeInterface|Node>} change
 		 */
 		onChildrenChanged: function(collection, change) {
 			for (var i = 0; i < change.oldItems.length; i++) {
 				var view = change.oldItems[i];
-				if (ViewInterface.isImplementedBy(view)) {
+				if (ParentInterface.isImplementedBy(view)) {
 					view.setParent(null);
 				}
 			}
 			for (var i = 0; i < change.newItems.length; i++) {
 				var view = change.newItems[i];
-				if (ViewInterface.isImplementedBy(view)) {
+				if (ParentInterface.isImplementedBy(view)) {
 					view.setParent(this);
 				}
 			}
@@ -55,6 +55,6 @@ define('views/container', [
 	 * @typedef Parameters
 	 * @namespace Views.Container
 	 * @extends Views.View.Parameters
-	 * @property {Array<Views.Node|Node>} children
+	 * @property {Array<Views.NodeInterface|Node>} children
 	 */
 });

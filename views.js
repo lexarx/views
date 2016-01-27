@@ -1,9 +1,9 @@
 define('views/views', [
-	'views/node'
+	'views/node-interface'
 ], function(Node) {
 	return {
 		/**
-		 * @param {Views.Node|Node} view
+		 * @param {Views.NodeInterface|Node} view
 		 */
 		getNode: function(view) {
 			if (Node.isImplementedBy(view)) {
@@ -14,7 +14,7 @@ define('views/views', [
 		},
 
 		/**
-		 * @param {Array<Views.Node|Node>} views
+		 * @param {Array<Views.NodeInterface|Node>} views
 		 * @returns {DocumentFragment}
 		 */
 		createDocumentFragment: function(views) {
@@ -29,7 +29,7 @@ define('views/views', [
 		/**
 		 * Detaches the view from it's parent node.
 		 * If parentNode is provided then the view is detached only if it's a child of this node.
-		 * @param {Views.Node|Node} view
+		 * @param {Views.NodeInterface|Node} view
 		 * @param {Node} [parentNode]
 		 */
 		detachView: function(view, parentNode) {
@@ -41,7 +41,7 @@ define('views/views', [
 		},
 
 		/**
-		 * @param {Array<Views.Node|Node>} views
+		 * @param {Array<Views.NodeInterface|Node>} views
 		 * @param {Node} [parentNode]
 		 */
 		detachViews: function(views, parentNode) {

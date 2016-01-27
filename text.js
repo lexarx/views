@@ -67,7 +67,7 @@ define('views/text', [
 		}
 	});
 	
-	module.exports = Text;
+	return Text;
 	
 	/**
 	 * @typedef Parameters

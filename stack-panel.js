@@ -25,8 +25,8 @@ define('views/stack-panel', [
 
 		/**
 		 * @override
-		 * @param {Collections.ObservableCollection<Views.Node|Node>} collection
-		 * @param {Collections.CollectionChange<Views.Node|Node>} change
+		 * @param {Collections.ObservableCollection<Views.NodeInterface|Node>} collection
+		 * @param {Collections.CollectionChange<Views.NodeInterface|Node>} change
 		 */
 		onChildrenChanged: function(collection, change) {
 			if (change.oldItems.length > 0) {

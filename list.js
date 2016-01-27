@@ -26,7 +26,7 @@ define('views/list', [
 		/**
 		 * @protected
 		 * @override
-		 * @param {Views.Node|Node} view
+		 * @param {Views.NodeInterface|Node} view
 		 */
 		destroyView: function(view) {
 			// Detach view before destruction to avoid reflow.
@@ -37,8 +37,8 @@ define('views/list', [
 		/**
 		 * @protected
 		 * @override
-		 * @param {Collections.ObservableCollection<Views.Node|Node>} collection
-		 * @param {Collections.CollectionChange<Views.Node|Node>} change
+		 * @param {Collections.ObservableCollection<Views.NodeInterface|Node>} collection
+		 * @param {Collections.CollectionChange<Views.NodeInterface|Node>} change
 		 */
 		onChildrenChanged: function(collection, change) {
 			// Old views are already detached during destruction.

@@ -1,12 +1,12 @@
 define('views/element', [
-	'class', 'views/node'
-], function(Class, Node) {
+	'class', 'views/node-interface'
+], function(Class, NodeInterface) {
 	var classSeparatorRegExp = / +/;
 	var classListSupported = 'classList' in document.documentElement;
 
 	/**
 	 * @class Element
-	 * @implements Views.Node
+	 * @implements Views.NodeInterface
 	 * @namespace Views
 	 */
 	var Element = Class.extend({
@@ -120,7 +120,7 @@ define('views/element', [
 		},
 		
 		/**
-		 * @implements Views.Node
+		 * @implements Views.NodeInterface
 		 * @returns {Node}
 		 */
 		getNode: function() {
@@ -161,7 +161,7 @@ define('views/element', [
 		}
 	});
 	
-	Node.addTo(Element);
+	NodeInterface.addTo(Element);
 	
 	return Element;
 	

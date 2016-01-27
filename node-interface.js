@@ -1,8 +1,8 @@
-define('views/node', [
+define('views/node-interface', [
 	'interface'
 ], function(Interface) {
 	/**
-	 * @interface Node
+	 * @interface NodeInterface
 	 * @namespace Views
 	 * @method getNode
 	 */

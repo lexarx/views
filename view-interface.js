@@ -1,6 +1,6 @@
 define('views/view-interface', [
-	'interface', 'views/node'
-], function(Interface, Node) {
+	'interface'
+], function(Interface) {
 	/**
 	 * @interface ViewInterface
 	 * @namespace Views
@@ -8,19 +8,8 @@ define('views/view-interface', [
 	 * @property {Event} detached
 	 * @property {Event} shown
 	 * @property {Event} hidden
-	 * @method setParent
 	 * @method isAttached
 	 * @method isShown
-	 * @method isVisible
-	 * @method setVisible
-	 * @method show
-	 * @method hide
-	 * @method setData
-	 * @method getData
-	 * @method bind
-	 * @method unbind
 	 */
-	return new Interface([
-		Node
-	]);
+	return new Interface();
 });

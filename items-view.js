@@ -1,7 +1,7 @@
 define('views/items-view', [
-	'views/container', 'views/view-interface', 'collections/collection-interface',
+	'views/container', 'views/data-interface', 'collections/collection-interface',
 	'collections/observable-collection-interface'
-], function(Container, ViewInterface, CollectionInterface, ObservableCollectionInterface) {
+], function(Container, DataInterface, CollectionInterface, ObservableCollectionInterface) {
 	var emptyArray = [];
 	
 	/**
@@ -166,7 +166,7 @@ define('views/items-view', [
 			var inPlaceViewsCount = Math.min(oldItemsCount, newItemsCount);
 			for (var i = 0; i < inPlaceViewsCount; i++) {
 				var view = this.children.get(index + i);
-				if (ViewInterface.isImplementedBy(view)) {
+				if (DataInterface.isImplementedBy(view)) {
 					var data = newItemsCollection ? newItems.get(i) : newItems[i];
 					view.setData(data);
 				}
@@ -199,7 +199,7 @@ define('views/items-view', [
 		 */
 		createViewFromClass: function(data) {
 			var view = new this.view();
-			if (ViewInterface.isImplementedBy(view)) {
+			if (DataInterface.isImplementedBy(view)) {
 				view.setData(data);
 			}
 			return view;
@@ -211,7 +211,7 @@ define('views/items-view', [
 		 */
 		createViewFromPool: function(data) {
 			var view = this.viewsPool.pop();
-			if (ViewInterface.isImplementedBy(view)) {
+			if (DataInterface.isImplementedBy(view)) {
 				view.setData(data);
 			}
 			return view;
@@ -245,10 +245,10 @@ define('views/items-view', [
 
 		/**
 		 * @protected
-		 * @param {Views.Node|Node} view
+		 * @param {Views.NodeInterface|Node} view
 		 */
 		destroyView: function(view) {
-			if (ViewInterface.isImplementedBy(view)) {
+			if (DataInterface.isImplementedBy(view)) {
 				view.setData(null);
 			}
 			if (this.viewsPool) {
