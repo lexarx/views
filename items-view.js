@@ -187,9 +187,9 @@ define('views/items-view', [
 		 */
 		createView: function(data) {
 			if (this.view !== undefined && this.view !== null) {
-				return this.createViewFromViewClass(data);
+				return this.createViewFromClass(data);
 			} else {
-				return this.createItemFromViewsPool(data);
+				return this.createViewFromPool(data);
 			}
 		},
 
@@ -197,7 +197,7 @@ define('views/items-view', [
 		 * @protected
 		 * @param {*} data
 		 */
-		createViewFromViewClass: function(data) {
+		createViewFromClass: function(data) {
 			var view = new this.view();
 			if (ViewInterface.isImplementedBy(view)) {
 				view.setData(data);
@@ -209,7 +209,7 @@ define('views/items-view', [
 		 * @protected
 		 * @param {*} data
 		 */
-		createItemFromViewsPool: function(data) {
+		createViewFromPool: function(data) {
 			var view = this.viewsPool.pop();
 			if (ViewInterface.isImplementedBy(view)) {
 				view.setData(data);
