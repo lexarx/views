@@ -1,10 +1,10 @@
-define('views/node-interface', [
-	'interface'
-], function(Interface) {
-	/**
-	 * @interface NodeInterface
-	 * @namespace Views
-	 * @method getNode
-	 */
-	return new Interface();
-});
+var Interface = require('interface');
+
+/**
+ * @interface NodeInterface
+ * @namespace Views
+ * @method getNode
+ */
+var NodeInterface = new Interface();
+
+module.exports = NodeInterface;
