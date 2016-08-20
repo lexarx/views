@@ -48,12 +48,12 @@ var View = Element.extend({
 		if (!this.visible) {
 			this.hideElement();
 		}
-		this.render();
 		if (parameters !== undefined && parameters.data !== undefined) {
-			this.setData(parameters.data);
+			this.data = parameters.data;
 		} else {
 			this.data = null;
 		}
+		this.render();
 	},
 
 	/**
